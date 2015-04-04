@@ -19,6 +19,8 @@
 
 #include "_py.h"
 
+#define STR_ERR_CAN_NOT_ALLOCATE_MEMORY     "Can not allocate memory"
+
 //
 // Exceptions
 //
@@ -146,6 +148,8 @@ PY_STRING::PY_STRING(const char * str)
     PY_STRING_INFO *    info;
 
     m_Buffer = (char *) malloc(sizeof(PY_STRING_INFO) + bytes_num_req);
+    if (m_Buffer == NULL)
+        throw _py_OSError(STR_ERR_CAN_NOT_ALLOCATE_MEMORY);
     info = (PY_STRING_INFO *) m_Buffer;
     m_Buffer += sizeof(PY_STRING_INFO);
 
@@ -231,6 +235,8 @@ PY_STRING & PY_STRING::operator=(const char * rs)
     if (m_Buffer == NULL)
     {
         m_Buffer = (char *) malloc(sizeof(PY_STRING_INFO) + bytes_num_req);
+        if (m_Buffer == NULL)
+            throw _py_OSError(STR_ERR_CAN_NOT_ALLOCATE_MEMORY);
         info = (PY_STRING_INFO *) m_Buffer;
         info->bytes_num = bytes_num_req;
         m_Buffer += sizeof(PY_STRING_INFO);
@@ -287,6 +293,8 @@ PY_STRING & PY_STRING::operator+=(const char * rs)
     if (m_Buffer == NULL)
     {
         m_Buffer = (char *) malloc(sizeof(PY_STRING_INFO) + bytes_num_req);
+        if (m_Buffer == NULL)
+            throw _py_OSError(STR_ERR_CAN_NOT_ALLOCATE_MEMORY);
         info = (PY_STRING_INFO *) m_Buffer;
         info->bytes_num = bytes_num_req;
         m_Buffer += sizeof(PY_STRING_INFO);
@@ -369,7 +377,7 @@ PY_STRING PY_STRING::format(const char * str, ...)
 
     buffer = (char *) malloc(bytes_num_req);
     if (buffer == NULL)
-        throw _py_OSError();
+        throw _py_OSError(STR_ERR_CAN_NOT_ALLOCATE_MEMORY);
 
     va_start(list, str);
     vsnprintf(buffer, bytes_num_req, str, list);
@@ -405,7 +413,7 @@ PY_STRING PY_STRING::join(LIST_PY_STRING & list)
 
     buffer = (char *) malloc(bytes_num_req);
     if (buffer == NULL)
-        throw _py_OSError();
+        throw _py_OSError(STR_ERR_CAN_NOT_ALLOCATE_MEMORY);
 
     bytes_num_req = 0;
     for (it = list.begin();
