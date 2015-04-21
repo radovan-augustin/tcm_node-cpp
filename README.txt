@@ -2,7 +2,7 @@
 tcm_node-cpp is portion of tcm_node.py rewritten to C++.
 
 Features:
-    - supports iblock backend and iSCSI over IP frontend
+    - supports iblock backend
     - can run with uClibc++ on embedded devices with OpenWrt
 
 Utility tcm_node.py is from Linux-IO Target (LIO -TM-) lio-utils
